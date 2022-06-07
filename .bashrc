@@ -139,3 +139,8 @@ parse_git_branch() {
      git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
 export PS1="${PS1::-3}\[\033[33m\]\$(parse_git_branch)\[\033[00m\] \$ "
+
+# For activating conda in Docker containers
+if [ -f "/venv/bin/activate" ]; then
+    . "/venv/bin/activate"
+fi
