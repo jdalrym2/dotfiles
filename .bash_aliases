@@ -18,3 +18,16 @@ EOF
 grne() {
   grep -rn . -e "$@" --include "*.py"
 }
+
+postgis() {
+  YML_FILE=/home/jon/git/public/PostgreSQL-PostGIS-TimescaleDB/docker-compose.yml
+  if [ "$1" = "up" ]
+  then
+    docker-compose -f $YML_FILE up --detach
+  elif [ "$1" = "down" ]
+  then
+    docker-compose -f $YML_FILE down
+  else
+    echo "Unknown command: '$1'"
+  fi
+}
