@@ -1,5 +1,5 @@
+#!/bin/bash
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
-alias qgis='source $HOME/workspace/run_qgis.sh'
 alias josm='java -jar /home/jon/workspace/josm/josm-tested.jar'
 pyQuickPlot() {
   python3 <<EOF
@@ -30,4 +30,25 @@ postgis() {
   else
     echo "Unknown command: '$1'"
   fi
+}
+
+qgis() {
+  # Determine if there's a PostGIS network to connect to
+  POSTGIS_NETWORK="postgresql-postgis-timescaledb_overlay"
+  NETWORK=''
+  if [ ! -z "$(docker network ls | grep $POSTGIS_NETWORK)" ]
+  then
+    echo "Found network '$POSTGIS_NETWORK'. Adding to container."
+    NETWORK="--network $POSTGIS_NETWORK"
+  fi
+
+  # Run QGis!
+  xhost +SI:localuser:root
+  docker run --rm -it --name qgis \
+      -e DISPLAY \
+      -v $HOME:$HOME \
+      -v /data:/data \
+      -v /tmp/.X11-unix:/tmp/.X11-unix \
+      $NETWORK \
+      qgis/qgis:latest qgis
 }
