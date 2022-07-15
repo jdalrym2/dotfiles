@@ -147,3 +147,8 @@ export PS1="${PS1::-3}\[\033[33m\]\$(parse_git_branch)\[\033[00m\] \$ "
 if [ -f "/venv/bin/activate" ]; then
     . "/venv/bin/activate"
 fi
+
+# CUDA Setup
+export PATH=/usr/local/cuda-11.7/bin:$PATH
+export LD_LIBRARY_PATH=/usr/local/cuda-11.7/lib64:$LD_LIBRARY_PATH
+export CUDA_VISIBLE_DEVICES=1,
