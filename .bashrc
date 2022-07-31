@@ -151,4 +151,5 @@ fi
 # CUDA Setup
 export PATH=/usr/local/cuda-11.7/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda-11.7/lib64:$LD_LIBRARY_PATH
-export CUDA_VISIBLE_DEVICES=1,
+export CUDA_VISIBLE_DEVICES=0,
+export CUDA_DEVICE_ORDER=PCI_BUS_ID
