@@ -52,3 +52,5 @@ qgis() {
       $NETWORK \
       qgis/qgis:latest qgis
 }
+
+alias whoops='sudo $(history -p \!\!$)'
