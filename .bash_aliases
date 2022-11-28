@@ -8,8 +8,12 @@ import matplotlib.pyplot as plt
 im = imread('$1')
 print('Image shape: %s' % repr(im.shape))
 if im.ndim == 3 and im.shape[2] == 2:
-  print('Taking first channel only...')
-  im = im[:, :, 0]
+    if len('$2'):
+        c = int('$2')
+    else:
+        c = 0
+    print(f'Taking channel {c:d} only...')
+    im = im[:, :, c]
 plt.imshow(im)
 plt.show()
 EOF
@@ -54,3 +58,7 @@ qgis() {
 }
 
 alias whoops='sudo $(history -p \!\!$)'
+
+idea() {
+  cd /opt/idea-IC-222.4167.29/bin && ./idea.sh
+}

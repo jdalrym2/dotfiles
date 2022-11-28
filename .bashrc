@@ -8,6 +8,9 @@ case $- in
       *) return;;
 esac
 
+# disable flow control
+stty -ixon
+
 # don't put these commands in the bash history
 export HISTIGNORE="history:ls:pwd:clear:exit:"
 
@@ -135,8 +138,9 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 # Custom stuff Jon added!
-export PATH=$PATH:/usr/local/texlive/2021/bin/x86_64-linux
+export PATH=$PATH:/usr/local/texlive/2021/bin/x86_64-linux:/opt/gradle/gradle-7.5.1/bin
 alias sl='ls'
+alias mambda='mamba'  # b/c I type 'lambda' too much
 
 parse_git_branch() {
      git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
