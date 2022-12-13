@@ -62,3 +62,8 @@ alias whoops='sudo $(history -p \!\!$)'
 idea() {
   cd /opt/idea-IC-222.4167.29/bin && ./idea.sh
 }
+
+reset_permissions(){
+  find . -type d -exec chmod 755 {} \;
+  find . -type f -exec chmod 644 {} \;
+}
