@@ -122,6 +122,8 @@ if ! shopt -oq posix; then
   fi
 fi
 
+# Crude way to not execute this in docker containers
+if [ "$USER" = "jon" ]; then
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/home/jon/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
@@ -137,8 +139,17 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-# Custom stuff Jon added!
 export PATH=$PATH:/usr/local/texlive/2021/bin/x86_64-linux:/opt/gradle/gradle-7.5.1/bin
+
+# CUDA Setup
+export PATH=/usr/local/cuda-11.7/bin:$PATH
+export LD_LIBRARY_PATH=/usr/local/cuda-11.7/lib64:$LD_LIBRARY_PATH
+export CUDA_VISIBLE_DEVICES=0,
+export CUDA_DEVICE_ORDER=PCI_BUS_ID
+
+fi
+
+# Custom stuff Jon added!
 alias sl='ls'
 alias mambda='mamba'  # b/c I type 'lambda' too much
 
@@ -146,14 +157,3 @@ parse_git_branch() {
      git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
 export PS1="${PS1::-3}\[\033[33m\]\$(parse_git_branch)\[\033[00m\] \$ "
-
-# For activating conda in Docker containers
-if [ -f "/venv/bin/activate" ]; then
-    . "/venv/bin/activate"
-fi
-
-# CUDA Setup
-export PATH=/usr/local/cuda-11.7/bin:$PATH
-export LD_LIBRARY_PATH=/usr/local/cuda-11.7/lib64:$LD_LIBRARY_PATH
-export CUDA_VISIBLE_DEVICES=0,
-export CUDA_DEVICE_ORDER=PCI_BUS_ID

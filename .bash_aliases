@@ -1,4 +1,5 @@
 #!/bin/bash
+alias df='df -h'
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias josm='java -jar /home/jon/workspace/josm/josm-tested.jar'
 pyQuickPlot() {
@@ -48,13 +49,15 @@ qgis() {
 
   # Run QGis!
   xhost +SI:localuser:root
-  docker run --rm -it --name qgis \
+  docker run --rm -it -u root --name qgis \
       -e DISPLAY \
       -v $HOME:$HOME \
+      -v $HOME:/root \
       -v /data:/data \
+      -v /nfs:/nfs \
       -v /tmp/.X11-unix:/tmp/.X11-unix \
       $NETWORK \
-      qgis/qgis:latest qgis
+      qgis/qgis:release-3_28 qgis
 }
 
 alias whoops='sudo $(history -p \!\!$)'
@@ -66,4 +69,10 @@ idea() {
 reset_permissions(){
   find . -type d -exec chmod 755 {} \;
   find . -type f -exec chmod 644 {} \;
+}
+
+alias please='sudo apt'
+
+csv() {
+  column -s, -t < $1 | less -#2 -N -S
 }
