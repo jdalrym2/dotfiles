@@ -76,3 +76,52 @@ alias please='sudo apt'
 csv() {
   column -s, -t < $1 | less -#2 -N -S
 }
+
+venv_create() {
+  local VENV_DIR
+
+  if [ -z "$1" ]
+  then
+    echo "No argument supplied, assuming current directory"
+    VENV_DIR='.'
+  else
+    VENV_DIR=$1
+  fi
+
+  python3 -m venv $VENV_DIR/venv &&\
+  . $VENV_DIR/venv/bin/activate &&\
+  python3 -m pip install pip-tools
+  if [ -f "$VENV_DIR/requirements.in" ]; then
+    echo "Found requirements.in! Running pip-compile..."
+    pip-compile $VENV_DIR/requirements.in > $VENV_DIR/requirements.txt
+  else
+    echo "No requirements.in found"
+  fi
+  if [ -f "$VENV_DIR/requirements.txt" ]; then
+    echo "Found requirements.txt! Running pip-sync..."
+    pip-sync
+  else
+    echo "No requirements.txt found"
+  fi
+}
+
+venv_activate() {
+  local VENV_DIR
+
+  if [ -z "$1" ]
+  then
+    echo "No argument supplied, assuming current directory"
+    VENV_DIR='.'
+  else
+    VENV_DIR=$1
+  fi
+
+  source $VENV_DIR/venv/bin/activate
+
+  if [ -f "$VENV_DIR/requirements.txt" ]; then
+    echo "Found requirements.txt! Running pip-sync..."
+    pip-sync
+  else
+    echo "No requirements.txt found"
+  fi
+}

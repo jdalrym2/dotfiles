@@ -8,6 +8,9 @@ case $- in
       *) return;;
 esac
 
+# Max number of open files
+ulimit -n 4096
+
 # disable flow control
 stty -ixon
 
@@ -24,6 +27,9 @@ shopt -s histappend
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 export HISTSIZE=1000
 export HISTFILESIZE=10000
+
+# Default editor
+export EDITOR=vi
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -124,22 +130,35 @@ fi
 
 # Crude way to not execute this in docker containers
 if [ "$USER" = "jon" ]; then
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/jon/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/jon/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/jon/miniconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/jon/miniconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
+# # >>> conda initialize >>>
+# # !! Contents within this block are managed by 'conda init' !!
+# __conda_setup="$('/home/jon/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+# if [ $? -eq 0 ]; then
+#     eval "$__conda_setup"
+# else
+#     if [ -f "/home/jon/miniconda3/etc/profile.d/conda.sh" ]; then
+#         . "/home/jon/miniconda3/etc/profile.d/conda.sh"
+#     else
+#         export PATH="/home/jon/miniconda3/bin:$PATH"
+#     fi
+# fi
+# unset __conda_setup
+# # <<< conda initialize <<<
 
-export PATH=$PATH:/usr/local/texlive/2021/bin/x86_64-linux:/opt/gradle/gradle-7.5.1/bin
+# Local binaries
+export PATH=$PATH:/home/jon/.local/bin
+
+# Libraries
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib:/usr/lib32:/usr/lib64:/usr/local/lib:/usr/local/lib64
+
+# TeX stuff
+export PATH=$PATH:/usr/local/texlive/2021/bin/x86_64-linux
+
+# Gradle
+export PATH=$PATH:/opt/gradle/gradle-7.5.1/bin
+
+# Rust setup
+. $HOME/.cargo/env
 
 # CUDA Setup
 export PATH=/usr/local/cuda-11.7/bin:$PATH
