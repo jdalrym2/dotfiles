@@ -77,7 +77,7 @@ csv() {
   column -s, -t < $1 | less -#2 -N -S
 }
 
-venv_create() {
+venv-create() {
   local VENV_DIR
 
   if [ -z "$1" ]
@@ -92,36 +92,39 @@ venv_create() {
   . $VENV_DIR/venv/bin/activate &&\
   python3 -m pip install pip-tools
   if [ -f "$VENV_DIR/requirements.in" ]; then
-    echo "Found requirements.in! Running pip-compile..."
-    pip-compile $VENV_DIR/requirements.in > $VENV_DIR/requirements.txt
+    while true; do
+      read -p "Found requirements.in! Run pip-compile? (y/n) " -r
+      case $REPLY in
+        [Nn]* ) return;;
+        [Yy]* ) pip-compile -o $VENV_DIR/requirements.txt $VENV_DIR/requirements.in ;;
+        * ) ;;
+      esac
+    done
   else
-    echo "No requirements.in found"
+    echo "No requirements.in found."
   fi
   if [ -f "$VENV_DIR/requirements.txt" ]; then
-    echo "Found requirements.txt! Running pip-sync..."
-    pip-sync
+    while true; do
+      read -p "Found requirements.txt! Run pip-sync? (y/n) " -r
+      case $REPLY in
+        [Nn]* ) return;;
+        [Yy]* ) pip-sync -o $VENV_DIR/requirements.txt ;;
+        * ) ;;
+      esac
+    done
   else
-    echo "No requirements.txt found"
+    echo "No requirements.txt found."
   fi
 }
 
-venv_activate() {
+venv-activate() {
   local VENV_DIR
 
   if [ -z "$1" ]
   then
-    echo "No argument supplied, assuming current directory"
     VENV_DIR='.'
   else
     VENV_DIR=$1
   fi
-
   source $VENV_DIR/venv/bin/activate
-
-  if [ -f "$VENV_DIR/requirements.txt" ]; then
-    echo "Found requirements.txt! Running pip-sync..."
-    pip-sync
-  else
-    echo "No requirements.txt found"
-  fi
 }
