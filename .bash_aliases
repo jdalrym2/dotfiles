@@ -79,24 +79,27 @@ csv() {
 
 venv-create() {
   local VENV_DIR
+  local PYTHON_EXE
+
+  VENV_DIR='.'
 
   if [ -z "$1" ]
   then
-    echo "No argument supplied, assuming current directory"
-    VENV_DIR='.'
+    echo "No python interpreter selected, using 'python3'"
+    PYTHON_EXE='python3'
   else
-    VENV_DIR=$1
+    PYTHON_EXE=$1
   fi
 
-  python3 -m venv $VENV_DIR/venv &&\
+  $PYTHON_EXE -m venv $VENV_DIR/venv &&\
   . $VENV_DIR/venv/bin/activate &&\
-  python3 -m pip install pip-tools
+  $PYTHON_EXE -m pip install pip-tools
   if [ -f "$VENV_DIR/requirements.in" ]; then
     while true; do
       read -p "Found requirements.in! Run pip-compile? (y/n) " -r
       case $REPLY in
         [Nn]* ) return;;
-        [Yy]* ) pip-compile -o $VENV_DIR/requirements.txt $VENV_DIR/requirements.in ;;
+        [Yy]* ) pip-compile -o $VENV_DIR/requirements.txt $VENV_DIR/requirements.in; break ;;
         * ) ;;
       esac
     done
@@ -108,7 +111,7 @@ venv-create() {
       read -p "Found requirements.txt! Run pip-sync? (y/n) " -r
       case $REPLY in
         [Nn]* ) return;;
-        [Yy]* ) pip-sync -o $VENV_DIR/requirements.txt ;;
+        [Yy]* ) pip-sync $VENV_DIR/requirements.txt; break ;;
         * ) ;;
       esac
     done

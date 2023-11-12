@@ -146,9 +146,6 @@ if [ "$USER" = "jon" ]; then
   # Gradle
   export PATH=$PATH:/opt/gradle/gradle-7.5.1/bin
 
-  # Rust setup
-  . $HOME/.cargo/env
-
   # CUDA Setup
   export PATH=/usr/local/cuda-11.7/bin:$PATH
   export LD_LIBRARY_PATH=/usr/local/cuda-11.7/lib64:$LD_LIBRARY_PATH
